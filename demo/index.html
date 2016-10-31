@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rating Control Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../paper-styles/demo-pages.html">
+    <link rel="import" href="../rating-control.html">
+    <style is="custom-style">
+      /* Override the value specified in icon-toggle-demo */
+      icon-toggle-demo {
+        --icon-toggle-pressed-color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <rating-control top="5" type-icon='star' onclick="getRating()"></rating-control>
+    <script>
+      function getRating()
+      {
+        console.log(document.querySelector('rating-control').current);
+      }
+    </script>
+  </body>
+</html>

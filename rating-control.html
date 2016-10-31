@@ -1,0 +1,94 @@
+<!-- Imports polymer -->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-card/paper-card.html">
+
+<!-- Import icon-toggle -->
+<link rel="import" href="./icon-toggle.html">
+
+<!--
+Rating control customizable
+
+Example:
+
+    <rating-control top="5" type-icon="flag"></rating-control>
+
+How to get the current rating:
+
+    document.querySelector('rating-control').current
+
+@demo demo/index.html
+-->
+<dom-module id="rating-control">
+  <template>
+    <style>
+      :host {
+        --icon-toggle-color: lightgrey;
+        --icon-toggle-outline-color: black;
+        --icon-toggle-pressed-color: orange;
+        font-family: sans-serif;
+      };
+    </style>
+    <paper-card heading="Rating Control">
+      <div class="card-content">
+        <div id="rating"></div>
+        <div>Current rating {{current}}</div>
+      </div>
+    </paper-card>
+  </template>
+
+<!-- Registers custom element -->
+  <script>
+    Polymer({
+      is: "rating-control",
+      properties: {
+        /**
+         *  Top represents the rating's scale
+         */
+        top: {
+          type: Number,
+          value: 5,
+          notify: true,
+          reflectToAttribute: true
+        },
+        /**
+         *  The icon name, for default icons are bring from
+         *  https://elements.polymer-project.org/elements/iron-icons?view=demo:demo/index.html
+         */
+        typeIcon:
+        {
+          type: String,
+          value: 'star'
+        },
+        /*
+        * The current rating selected.
+        */
+        current: {
+          type:Number,
+          value: 0,
+          reflectToAttribute: true
+        }
+      },
+      ready: function(){
+         for(let i = 0; i< this.top; i ++)
+         {
+           var el = document.createElement("icon-toggle");
+           el.setAttribute('toggle-icon',this.typeIcon);
+           el.setAttribute('star',i + 1);
+           el.addEventListener('set_rate', this._set_rate);
+           this.$.rating.appendChild(el);
+        }
+      },
+      _set_rate: function(e){
+        let current = this.getAttribute('star');
+        document.querySelector('rating-control').current = current;
+        document.querySelectorAll('icon-toggle').forEach(function(element) {
+            element.removeAttribute('pressed');
+            if (element.getAttribute('star') <= current) {
+              element.setAttribute('pressed',true);
+            }
+          });
+        }
+    });
+  </script>
+</dom-module>

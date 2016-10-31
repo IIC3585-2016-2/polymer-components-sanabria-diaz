@@ -1,0 +1,102 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../paper-card/paper-card.html">
+
+<dom-module id="icon-toggle-demo">
+  <template>
+    <style include="iron-flex">
+      :host {
+        --icon-toggle-color: lightgrey;
+        --icon-toggle-outline-color: black;
+        --icon-toggle-pressed-color: #4522AA;
+        font-family: sans-serif;
+      };
+    </style>
+<div class="layout horizontal">
+  <div>
+      <paper-card>
+        <div class="card-content">
+    <h3>Statically-configured icon-toggles</h3>
+    <icon-toggle toggle-icon="star"></icon-toggle>
+    <icon-toggle toggle-icon="star" pressed></icon-toggle>
+</div>
+</div>
+  <div>
+<paper-card style="margin-left:4px;">
+  <div class="card-content">
+    <h3>Data-bound icon-toggle</h3>
+    <span>[[message(isFav)]]</span>
+    <icon-toggle toggle-icon="flag" pressed="{{isFav}}"></icon-toggle>
+  </div>
+</div>
+</div>
+  </template>
+
+  <script>
+    Polymer({
+      is: "icon-toggle-demo",
+      message: function(fav) {
+        if (fav) {
+          return "Checkpoint reached!";
+        } else {
+          return "Set checkpoint?";
+        }
+      }
+    });
+  </script>
+</dom-module>
+
+<dom-module id="icon-toggle">
+  <template>
+    <style>
+    :host {
+        font-family: sans-serif;
+        cursor:pointer;
+    }
+    iron-icon.icon-toggle:hover {
+      fill: gold;
+      width:30px;
+      height:30px;
+    },
+    iron-icon {
+      fill: var(--icon-toggle-color, rgba(0,0,0,0));
+      stroke: var(--icon-toggle-outline-color, currentcolor);
+    }
+    :host([pressed]) iron-icon {
+      fill: var(--icon-toggle-pressed-color, currentcolor);
+    }
+    </style>
+    <iron-icon icon="[[toggleIcon]]">
+    </iron-icon>
+  </template>
+
+<!-- Registers custom element -->
+  <script>
+  Polymer({
+    is: 'icon-toggle',
+    properties: {
+      /*
+      * Toggle Icon property
+      */
+      toggleIcon: String,
+      /*
+      * Observable variable over icons that can be toggled
+      */
+      pressed: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
+      }
+    },
+    listeners: {
+      'tap': 'toggle'
+    },
+    toggle: function() {
+      this.pressed = !this.pressed;
+    },
+  });
+  </script>
+
+</dom-module>

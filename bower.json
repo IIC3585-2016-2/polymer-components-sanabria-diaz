@@ -1,0 +1,21 @@
+{
+  "name": "rating-control",
+  "version": "1.0.0",
+  "homepage": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "paper-card": "PolymerElements/paper-card#^1.1.4",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1"
+  }
+}
