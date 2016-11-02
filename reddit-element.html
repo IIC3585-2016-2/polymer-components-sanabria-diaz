@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../byutv-jsonp/byutv-jsonp.html">
+
+<!--
+`reddit-element`
+This is a reddit component that add simple reddit search on different subreddits
+
+@demo demo/reddit.html
+-->
+<dom-module id="reddit-element">
+    <template>
+        <style>
+            paper-card {
+                margin: 10px;
+            }
+            paper-button {
+                --paper-button-ink-color: var(--paper-pink-a200);
+                /* These could also be individually defined for each of the
+                  specific css classes, but we'll just do it once as an example */
+                --paper-button-flat-keyboard-focus: {
+                    background-color: var(--paper-pink-a200);
+                    color: white !important;
+                };
+                --paper-button-raised-keyboard-focus: {
+                    background-color: var(--paper-pink-a200) !important;
+                    color: white !important;
+                };
+                background-color: var(--paper-indigo-500);
+                color: white;
+                --paper-button-raised-keyboard-focus: {
+                    background-color: var(--paper-pink-a200) !important;
+                    color: white !important;
+                };
+            }
+            paper-button:hover {
+                background-color: var(--paper-indigo-100);
+            }
+            a paper-button {
+                text-decoration: none;
+            }
+        </style>
+
+        <paper-input id="searchInput" placeholder="Search a subreddit (example: funny)" value="{{subreddit}}" ></paper-input>
+        <paper-button id="searchButton" raised>Search</paper-button>
+        <iron-list items="{{stories}}">
+            <template>
+                <paper-card heading="{{item.title}}">
+                    <div class="card-content">
+                        <p>Posted by: {{item.author}}</p>
+                        <p>Score: {{item.score}}</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="{{item.url}}" target="_blank">
+                            <paper-button raised>Go</paper-button>
+                        </a>
+                    </div>
+                </paper-card>
+            </template>
+        </iron-list>
+        <byutv-jsonp id="ajaxGET" on-response="refresh"></byutv-jsonp>
+    </template>
+
+    <script>
+        Polymer({
+            is: "reddit-element",
+            properties: {
+                subreddit: {
+                    type: String,
+                    value: [],
+                    notify: true
+                },
+                stories: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                }
+            },
+            listeners: {
+                'searchButton.tap': 'search'
+            },
+            search: function () {
+                var cbname = "fn" + Date.now();
+                this.$.ajaxGET.callbackKey = "jsonp";
+                this.$.ajaxGET.callbackValue = "cbname";
+                this.$.ajaxGET.params = {sort: "top"};
+                this.$.ajaxGET.url = "http://www.reddit.com/r/" + this.subreddit + ".json";
+                this.$.ajaxGET.generateRequest();
+            },
+            refresh: function () {
+                var response = this.$.ajaxGET.lastResponse;
+                var error = this.$.ajaxGET.lastError;
+                if (error == undefined) {
+                    this.stories = response.data.children.map(function(c) {
+                        return c.data;
+                    });
+                    console.log(this.stories);
+                }
+            }
+        });
+    </script>
+</dom-module>
