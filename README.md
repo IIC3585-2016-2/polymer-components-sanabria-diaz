@@ -1,4 +1,4 @@
-# Polymer Components Pablo Sanabria - Juan Diego Diaz
+# Polymer Components Pablo Sanabria - Juan Diego Diaz M.
 =========================================
 
 * Icon toggle + paper card + iron flex layout
